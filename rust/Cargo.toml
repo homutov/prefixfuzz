@@ -10,4 +10,3 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = "0.25.0"
-trie-rs = "0.4.2"
