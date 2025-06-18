@@ -2,7 +2,7 @@ use std::any::Any;
 use std::collections::HashMap;
 
 pub struct State {
-   map: HashMap<String, Box<dyn Any>>,
+    map: HashMap<String, Box<dyn Any>>,
 }
 
 impl State {
@@ -25,7 +25,7 @@ impl State {
 
 pub trait Agent {
     fn initial_state(&mut self) -> State;
-    fn visit_node(&mut self, node_id: u32, state: &mut State);
+    fn visit_node(&mut self, node_id: u32, payload: Option<u32>, state: &mut State);
     fn get_children_to_visit(
         &mut self,
         node_id: u32,
@@ -83,7 +83,7 @@ impl Trie {
 
         while !stack.is_empty() {
             let (node_id, mut state) = stack.pop().unwrap();
-            agent.visit_node(node_id, &mut state);
+            agent.visit_node(node_id, self.node_payloads[node_id as usize], &mut state);
 
             let children = self.get_children(node_id);
 

@@ -12,7 +12,7 @@ pub struct PrefixSearch {
 
 #[pymethods]
 impl PrefixSearch {
-    pub fn fuzzy_search(
+    pub fn fuzzy_match(
         &self,
         prefix: String,
         max_dist: usize,
@@ -24,10 +24,14 @@ impl PrefixSearch {
         matcher
             .get_results()
             .iter()
-            .map(|(prefix, node_id, dist)| {
-                (prefix.clone(), self.get_payload(*node_id), *dist)
-            })
+            .map(|(prefix, node_id, dist)| (prefix.clone(), self.get_payload(*node_id), *dist))
             .collect()
+    }
+
+    pub fn exact_match(&self, prefix: String) -> Option<(String, Option<u32>, usize)> {
+        self.fuzzy_match(prefix, 0, None)
+            .first()
+            .map(|r| r.clone())
     }
 
     pub fn get_children(&self, node_id: u32) -> Vec<(char, u32)> {
