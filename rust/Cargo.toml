@@ -9,5 +9,5 @@ name = "prefixfuzz"
 crate-type = ["cdylib"]
 
 [dependencies]
+bincode = "2.0.1"
 pyo3 = "0.25.0"
-trie-rs = "0.4.2"

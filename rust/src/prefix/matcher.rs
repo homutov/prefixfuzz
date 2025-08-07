@@ -29,7 +29,7 @@ impl Agent for Matcher {
         state
     }
 
-    fn visit_node(&mut self, node_id: u32, state: &mut State) {
+    fn visit_node(&mut self, node_id: u32, payload: Option<u32>, state: &mut State) {
         if state.get::<Vec<char>>("CUR_PREFIX").unwrap().len() == 0 {
             // root node
             state.put(
@@ -65,7 +65,7 @@ impl Agent for Matcher {
 
         // if the last entry in the row indicates the optimal cost is less than the
         // maximum cost, and there is a word in this trie node, then add it.
-        if *cur_row.last().unwrap() <= self.max_dist {
+        if payload.is_some() && *cur_row.last().unwrap() <= self.max_dist {
             if self.limit.is_none() || (self.results.len() < self.limit.unwrap()) {
                 self.results.push((
                     cur_prefix.into_iter().collect(),
