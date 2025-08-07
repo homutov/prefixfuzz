@@ -19,6 +19,5 @@ features = ["pyo3/extension-module"]
 
 [dependency-groups]
 dev = [
-    "polars>=1.30.0",
     "pytest>=8.4.0",
 ]
