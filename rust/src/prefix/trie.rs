@@ -1,5 +1,6 @@
 use std::any::Any;
 use std::collections::HashMap;
+use bincode::{Decode, Encode};
 
 pub struct State {
     map: HashMap<String, Box<dyn Any>>,
@@ -34,6 +35,8 @@ pub trait Agent {
     ) -> Vec<(u32, State)>;
 }
 
+
+#[derive(Encode, Decode)]
 pub struct Trie {
     node_shifts: Vec<u32>,
     node_chars: Vec<Option<char>>,

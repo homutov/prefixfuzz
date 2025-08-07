@@ -1,5 +1,5 @@
 use pyo3::prelude::*;
-
+use bincode::config;
 pub mod prefix;
 
 use crate::prefix::matcher::Matcher;
@@ -41,6 +41,10 @@ impl PrefixSearch {
     pub fn get_payload(&self, node_id: u32) -> Option<u32> {
         self.trie.get_payload(node_id)
     }
+
+    pub fn to_bytes(&self) -> Vec<u8> {
+        bincode::encode_to_vec(&self.trie, config::standard()).unwrap()
+    }
 }
 
 #[pyfunction]
@@ -58,9 +62,16 @@ fn from_internal_data(
     })
 }
 
+#[pyfunction]
+fn from_bytes(bs: Vec<u8>) -> PyResult<PrefixSearch> {
+    let (trie, _) = bincode::decode_from_slice(&bs, config::standard()).unwrap();
+    Ok(PrefixSearch{ trie })
+}
+
 #[pymodule]
 fn _prefixfuzz(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(from_internal_data, m)?)?;
+    m.add_function(wrap_pyfunction!(from_bytes, m)?)?;
     m.add_class::<PrefixSearch>()?;
     Ok(())
 }
